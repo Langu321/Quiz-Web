@@ -71,15 +71,26 @@ const QUIZ_RESULTS = {
 };
 
 // ==========================================
-// 5. BIẾN THAY ĐỔI (RUNTIME STATE)
+// 5. CẤU HÌNH PAUSE SCREEN (PAUSE CONFIG)
+// ==========================================
+// Dùng mảng cấu hình để xác định sau câu nào sẽ pause và text hiển thị.
+// Ví dụ: { question: 1, message: '...' } nghĩa là pause sau câu 1.
+// Lưu ý: không cần đưa vào câu cuối cùng nếu bạn muốn đi thẳng đến kết quả.
+const PAUSE_AFTER_QUESTIONS = [
+    { question: 1, message: 'Bạn vừa trả lời xong câu 1. Hít thở nhẹ, sau đó bấm Tiếp tục để câu hỏi tiếp theo xuất hiện.' },
+    { question: 3, message: 'Bạn đã vượt qua câu 3 rồi. Nghỉ ngơi ít lát và tiếp tục khám phá nhé!' }
+];
+
+// ==========================================
+// 6. BIẾN THAY ĐỔI (RUNTIME STATE)
 // ==========================================
 let currentQuestionIndex = 0;
-let userScores = { ...CONFIG.DEFAULT_SCORE_STATE }; 
-let userName = ""; 
+let userScores = { ...CONFIG.DEFAULT_SCORE_STATE };
+let userName = "";
 let userAnswers = []; // Mảng mới dùng để lưu các ký tự đáp án (A, B, C, D) qua từng câu
 
 // ==========================================
-// 6. PHẦN TỬ GIAO DIỆN (DOM ELEMENTS)
+// 7. PHẦN TỬ GIAO DIỆN (DOM ELEMENTS)
 // ==========================================
 const DOM = {
     startScreen: document.getElementById('start-screen'),
@@ -148,19 +159,28 @@ function handleAnswer(optionId, score) {
         userScores[key] = (userScores[key] || 0) + score[key];
     }
 
+    const answeredQuestionNumber = currentQuestionIndex + 1; // số câu người dùng vừa trả lời
     currentQuestionIndex++;
 
-    if (currentQuestionIndex < QUIZ_QUESTIONS.length) {
-        showPauseScreen();
-    } else {
+    if (currentQuestionIndex >= QUIZ_QUESTIONS.length) {
+        // Đã trả lời xong tất cả câu hỏi, đi thẳng đến kết quả
         showResult();
+        return;
+    }
+
+    // Tìm cấu hình pause cho câu vừa hoàn thành.
+    const pauseConfig = PAUSE_AFTER_QUESTIONS.find(item => item.question === answeredQuestionNumber);
+    if (pauseConfig) {
+        showPauseScreen(answeredQuestionNumber, pauseConfig.message);
+    } else {
+        showQuestion();
     }
 }
 
-function showPauseScreen() {
+function showPauseScreen(answeredQuestionNumber, customMessage) {
     DOM.quizScreen.classList.add('hide');
     DOM.pauseScreen.classList.remove('hide');
-    DOM.pauseText.innerText = `Bạn đã hoàn thành ${currentQuestionIndex} / ${QUIZ_QUESTIONS.length} câu. Thư giãn một chút rồi bấm Tiếp tục để sang câu hỏi tiếp theo.`;
+    DOM.pauseText.innerText = customMessage || `Bạn vừa hoàn thành câu ${answeredQuestionNumber}. Nghỉ ngơi chút rồi bấm Tiếp tục để sang câu hỏi tiếp theo.`;
 }
 
 DOM.continueBtn.addEventListener('click', () => {
