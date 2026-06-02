@@ -84,20 +84,60 @@ function handleAnswer(score) {
     }
 }
 
-// Tính toán và hiển thị kết quả
+// Thêm biến global để lưu tên ở đầu file script.js
+let userName = ""; 
+
+// Sửa lại sự kiện Click nút Start
+document.getElementById('start-btn').addEventListener('click', () => {
+    const nameInput = document.getElementById('username-input').value.trim();
+    if (nameInput === "") {
+        alert("Vui lòng nhập tên của bạn trước khi bắt đầu nhé!");
+        return;
+    }
+    userName = nameInput; // Lưu tên lại
+    startScreen.classList.add('hide');
+    quizScreen.classList.remove('hide');
+    showQuestion();
+});
+
+// Sửa lại hàm showResult() cũ để gọi hàm gửi dữ liệu
 function showResult() {
     quizScreen.classList.add('hide');
     resultScreen.classList.remove('hide');
 
-    // Logic xác định chuỗi tính cách
     let type = "";
     type += (userScores.E >= userScores.I) ? "E" : "I";
     type += (userScores.T >= userScores.F) ? "T" : "F";
 
-    const finalResult = resultsData[type] || { title: "Chưa xác định", desc: "Cần thêm câu hỏi để phân tích chính xác." };
+    const finalResult = resultsData[type] || { title: "Chưa xác định", desc: "Cần thêm câu hỏi." };
 
     document.getElementById('result-type').innerText = finalResult.title;
     document.getElementById('result-desc').innerText = finalResult.desc;
+
+    // GỌI HÀM GỬI DATA SANG GOOGLE SHEETS TẠI ĐÂY
+    sendDataToGoogle(userName, finalResult.title);
+}
+
+// Hàm gửi data bằng Fetch API
+function sendDataToGoogle(name, result) {
+    // THAY ĐƯỜNG LINK WEB APP CỦA BẠN VÀO ĐÂY
+    const googleAppScriptUrl = "https://script.google.com/macros/s/AKfycbxhmNx1EfotUH6ilE5wu3ofBIxfPxWnb-kjzQLe6hPrdrUNf9o6dts5GtiUPe4zvncmFA/exec"; 
+
+    const data = {
+        name: name,
+        result: result
+    };
+
+    fetch(googleAppScriptUrl, {
+        method: "POST",
+        mode: "no-cors", // Bắt buộc phải có để tránh lỗi CORS từ Google
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    })
+    .then(() => console.log("Dữ liệu đã được cập nhật real-time lên Google Sheets!"))
+    .catch(error => console.error("Lỗi gửi dữ liệu:", error));
 }
 
 // Làm lại Quiz
