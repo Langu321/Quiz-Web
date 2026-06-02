@@ -172,7 +172,7 @@ function showResult() {
     // HIỂN THỊ GIF CẢM ƠN CHẮC CHẮN 100%
     const thanksGif = document.getElementById('thanks-gif');
     if (thanksGif) {
-        thanksGif.src = "https://jbagy.me/meme-xin-loi/?srsltid=AfmBOood8QjB0T6AvBcNiMTz7XqA9ehAwOhL4E_zlxCq4Jx57D_ys2-Q";
+        thanksGif.src = "./images/Thankiu.gif";
         thanksGif.style.display = 'inline-block'; // Ép trình duyệt render ảnh GIF ra màn hình
     }
 
