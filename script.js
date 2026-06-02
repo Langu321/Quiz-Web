@@ -2,7 +2,7 @@
 // 1. CẤU HÌNH HỆ THỐNG (SYSTEM CONFIG)
 // ==========================================
 const CONFIG = {
-    GOOGLE_SHEETS_API: "https://script.google.com/macros/s/AKfycbxhmNx1EfotUH6ilE5wu3ofBIxfPxWnb-kjzQLe6hPrdrUNf9o6dts5GtiUPe4zvncmFA/exec",
+    GOOGLE_SHEETS_API: "https://script.google.com/macros/s/AKfycby8ssgWxdoCkUIlzY1FQAL6SzKEsYPKZUv9ubmNK1EIC9nLwxbBmpvDIwPitWbF552D1Q/exec",
     DEFAULT_SCORE_STATE: { E: 0, I: 0, T: 0, F: 0 }
 };
 
@@ -63,12 +63,10 @@ const QUIZ_RESULTS = {
     "IT": { 
         title: "Nhà Phân Tích Độc Lập (IT)", 
         desc: "Bạn thích sự yên tĩnh và có tư duy logic cao.",
-        image: "./images/Result2.png"
     },
     "IF": { 
         title: "Người Đồng Cảm Sâu Sắc (IF)", 
         desc: "Bạn là người kín đáo, giàu tình cảm và hòa hợp.",
-        image: "./images/Result1.png"
     }
 };
 
@@ -164,7 +162,7 @@ function showResult() {
     const finalResult = QUIZ_RESULTS[type] || { 
         title: MESSAGES.UNKNOWN_RESULT_TITLE, 
         desc: MESSAGES.UNKNOWN_RESULT_DESC,
-        image: "https://your-link.com/images/default.png" 
+        image: "https://jbagy.me/meme-xin-loi/?srsltid=AfmBOood8QjB0T6AvBcNiMTz7XqA9ehAwOhL4E_zlxCq4Jx57D_ys2-Q" 
     };
 
     DOM.resultType.innerText = finalResult.title;
