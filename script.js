@@ -95,7 +95,10 @@ const DOM = {
     resultImg: document.getElementById('result-img'),
     resultType: document.getElementById('result-type'),
     resultDesc: document.getElementById('result-desc'),
-    resultGreeting: document.getElementById('result-greeting')
+    resultGreeting: document.getElementById('result-greeting'),
+    pauseScreen: document.getElementById('pause-screen'),
+    pauseText: document.getElementById('pause-text'),
+    continueBtn: document.getElementById('continue-btn')
 };
 
 // ==========================================
@@ -121,7 +124,7 @@ function showQuestion() {
     DOM.questionText.innerText = currentQuestion.text;
     DOM.optionsContainer.innerHTML = '';
     
-    const progressPercent = Math.round((currentQuestionIndex / QUIZ_QUESTIONS.length) * 100);
+    const progressPercent = Math.round(((currentQuestionIndex + 1) / QUIZ_QUESTIONS.length) * 100);
     DOM.progress.style.width = `${progressPercent}%`;
     DOM.progressInfo.innerText = `Câu ${currentQuestionIndex + 1} / ${QUIZ_QUESTIONS.length}`;
 
@@ -148,11 +151,23 @@ function handleAnswer(optionId, score) {
     currentQuestionIndex++;
 
     if (currentQuestionIndex < QUIZ_QUESTIONS.length) {
-        showQuestion();
+        showPauseScreen();
     } else {
         showResult();
     }
 }
+
+function showPauseScreen() {
+    DOM.quizScreen.classList.add('hide');
+    DOM.pauseScreen.classList.remove('hide');
+    DOM.pauseText.innerText = `Bạn đã hoàn thành ${currentQuestionIndex} / ${QUIZ_QUESTIONS.length} câu. Thư giãn một chút rồi bấm Tiếp tục để sang câu hỏi tiếp theo.`;
+}
+
+DOM.continueBtn.addEventListener('click', () => {
+    DOM.pauseScreen.classList.add('hide');
+    DOM.quizScreen.classList.remove('hide');
+    showQuestion();
+});
 
 // Tính toán và hiển thị kết quả
 function showResult() {
