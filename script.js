@@ -18,30 +18,32 @@ const MESSAGES = {
 };
 
 // ==========================================
-// 3. DỮ LIỆU CÂU HỎI (QUIZ DATA)
+// 3. DỮ LIỆU CÂU HỎI (QUIZ DATA) - Đã thêm ký tự định danh id
 // ==========================================
 const QUIZ_QUESTIONS = [
     {
         text: "Sau một tuần làm việc mệt mỏi, bạn sẽ chọn làm gì?",
         options: [
-            { text: "Đi tụ tập café, gặp gỡ bạn bè.", score: { E: 1 } },
-            { text: "Ở nhà đọc sách, xem phim hoặc chơi game.", score: { I: 1 } }
+            { id: "A", text: "Đi tụ tập café, gặp gỡ bạn bè.", score: { E: 1 } },
+            { id: "B", text: "Ở nhà đọc sách, xem phim hoặc chơi game.", score: { I: 1 } }
         ]
     },
     {
         text: "Khi một người bạn đang buồn, bạn có xu hướng:",
         options: [
-            { text: "Đưa ra lời khuyên và giải pháp thực tế.", score: { T: 1 } },
-            { text: "Lắng nghe, đồng cảm và an ủi cảm xúc của họ.", score: { F: 1 } }
+            { id: "A", text: "Đưa ra lời khuyên và giải pháp thực tế.", score: { T: 1 } },
+            { id: "B", text: "Lắng nghe, đồng cảm và an ủi cảm xúc của họ.", score: { F: 1 } }
         ]
     },
     {
         text: "Trong các cuộc thảo luận nhóm, bạn thường:",
         options: [
-            { text: "Chủ động nói lên quan điểm của mình ngay lập tức.", score: { E: 1 } },
-            { text: "Lắng nghe mọi người trước rồi mới phát biểu.", score: { I: 1 } }
+            { id: "A", text: "Chủ động nói lên quan điểm của mình ngay lập tức.", score: { E: 1 } },
+            { id: "B", text: "Lắng nghe mọi người trước rồi mới phát biểu.", score: { I: 1 } }
         ]
     }
+    // Phượng có thể tự tin copy-paste thêm các câu hỏi tiếp theo vào đây (Câu 4 -> Câu 12)
+    // Cứ xếp đủ cấu trúc { id: "Ký_tự", text: "Nội dung", score: { Hệ_số } } là được.
 ];
 
 // ==========================================
@@ -51,7 +53,7 @@ const QUIZ_RESULTS = {
     "ET": { 
         title: "Người Điều Hành Quyết Đoán (ET)", 
         desc: "Bạn là người năng nổ, thích hành động và lý trí.",
-        image: "./images/Result1.png" // Thay link ảnh thật của bạn vào đây
+        image: "./images/Result1.png"
     },
     "EF": { 
         title: "Người Kết Nối Ấm Áp (EF)", 
@@ -61,12 +63,12 @@ const QUIZ_RESULTS = {
     "IT": { 
         title: "Nhà Phân Tích Độc Lập (IT)", 
         desc: "Bạn thích sự yên tĩnh và có tư duy logic cao.",
-        image: "./images/Result3.png"
+        image: "./images/Result2.png"
     },
     "IF": { 
         title: "Người Đồng Cảm Sâu Sắc (IF)", 
         desc: "Bạn là người kín đáo, giàu tình cảm và hòa hợp.",
-        image: "./images/Result4.png"
+        image: "./images/Result1.png"
     }
 };
 
@@ -74,8 +76,9 @@ const QUIZ_RESULTS = {
 // 5. BIẾN THAY ĐỔI (RUNTIME STATE)
 // ==========================================
 let currentQuestionIndex = 0;
-let userScores = { ...CONFIG.DEFAULT_SCORE_STATE }; // Clone object tránh tham chiếu
+let userScores = { ...CONFIG.DEFAULT_SCORE_STATE }; 
 let userName = ""; 
+let userAnswers = []; // Mảng mới dùng để lưu các ký tự đáp án (A, B, C, D) qua từng câu
 
 // ==========================================
 // 6. PHẦN TỬ GIAO DIỆN (DOM ELEMENTS)
@@ -90,7 +93,7 @@ const DOM = {
     startBtn: document.getElementById('start-btn'),
     restartBtn: document.getElementById('restart-btn'),
     nameInput: document.getElementById('username-input'),
-    resultImg: document.getElementById('result-img'), // Thêm dòng này
+    resultImg: document.getElementById('result-img'), 
     resultType: document.getElementById('result-type'),
     resultDesc: document.getElementById('result-desc')
 };
@@ -118,20 +121,24 @@ function showQuestion() {
     DOM.questionText.innerText = currentQuestion.text;
     DOM.optionsContainer.innerHTML = '';
     
-    // Cập nhật thanh tiến trình
     DOM.progress.style.width = `${(currentQuestionIndex / QUIZ_QUESTIONS.length) * 100}%`;
 
     currentQuestion.options.forEach(option => {
         const button = document.createElement('button');
         button.innerText = option.text;
         button.classList.add('btn', 'option-btn');
-        button.addEventListener('click', () => handleAnswer(option.score));
+        // Truyền cả ID đáp án (A, B, C, D) và bảng điểm vào hàm xử lý
+        button.addEventListener('click', () => handleAnswer(option.id, option.score));
         DOM.optionsContainer.appendChild(button);
     });
 }
 
 // Xử lý khi chọn câu trả lời
-function handleAnswer(score) {
+function handleAnswer(optionId, score) {
+    // 1. Lưu ký tự đáp án đã chọn vào mảng trạng thái
+    userAnswers.push(optionId);
+
+    // 2. Cộng điểm tính cách
     for (let key in score) {
         userScores[key] = (userScores[key] || 0) + score[key];
     }
@@ -160,25 +167,28 @@ function showResult() {
         image: "https://your-link.com/images/default.png" 
     };
 
-    // Hiển thị text
     DOM.resultType.innerText = finalResult.title;
     DOM.resultDesc.innerText = finalResult.desc;
 
-    // HIỂN THỊ ẢNH
     if (finalResult.image) {
         DOM.resultImg.src = finalResult.image;
-        DOM.resultImg.style.display = "block"; // Hiện ảnh nếu có
+        DOM.resultImg.style.display = "block";
     } else {
-        DOM.resultImg.style.display = "none"; // Ẩn nếu không có link ảnh
+        DOM.resultImg.style.display = "none";
     }
 
-    // Gửi data sang Google Sheets
-    sendDataToGoogle(userName, finalResult.title);
+    // Gửi data bao gồm cả mảng đáp án sang Google Sheets
+    sendDataToGoogle(userName, userAnswers, finalResult.title);
 }
 
 // Hàm gửi dữ liệu bằng Fetch API
-function sendDataToGoogle(name, result) {
-    const data = { name: name, result: result };
+function sendDataToGoogle(name, answers, result) {
+    // Đóng gói data có thêm trường answers
+    const data = { 
+        name: name, 
+        answers: answers, 
+        result: result 
+    };
 
     fetch(CONFIG.GOOGLE_SHEETS_API, {
         method: "POST",
@@ -194,7 +204,8 @@ function sendDataToGoogle(name, result) {
 DOM.restartBtn.addEventListener('click', () => {
     currentQuestionIndex = 0;
     userScores = { ...CONFIG.DEFAULT_SCORE_STATE };
-    DOM.nameInput.value = ""; // Xóa text trong ô nhập tên cũ
+    userAnswers = []; // Reset mảng đáp án về rỗng
+    DOM.nameInput.value = ""; 
     DOM.resultScreen.classList.add('hide');
     DOM.startScreen.classList.remove('hide');
 });
