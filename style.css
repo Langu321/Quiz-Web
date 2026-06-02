@@ -1,69 +1,163 @@
+/* Tổng thể hệ thống */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
 body {
-    background: #f0f2f5;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    padding: 20px;
 }
 
+/* Card Container dạng kính mờ */
 .quiz-container {
-    background: #ffffff;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 40px 30px;
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
     width: 100%;
-    max-width: 500px;
+    max-width: 550px;
     text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.screen { transition: all 0.3s ease; }
-.hide { display: none; }
+/* Hiệu ứng ẩn/hiện mượt mờ màn hình */
+.screen {
+    animation: fadeIn 0.5s ease-in-out;
+}
+.hide { display: none !important; }
 
-h1 { color: #333; margin-bottom: 15px; }
-h2 { color: #4a4a4a; margin-bottom: 20px; font-size: 1.2rem; }
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
+/* Typography */
+h1 {
+    color: #2d3748;
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+    line-height: 1.3;
+}
+
+h2 {
+    color: #4a5568;
+    margin-bottom: 25px;
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+/* Ô nhập tên tinh tế */
+#username-input {
+    padding: 14px 20px;
+    width: 100%;
+    margin-bottom: 20px;
+    border-radius: 12px;
+    border: 2px solid #e2e8f0;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s;
+}
+#username-input:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.25);
+}
+
+/* Nút bấm thiết kế hiện đại */
 .btn {
-    background: #007bff;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     border: none;
-    padding: 12px 24px;
-    border-radius: 6px;
+    padding: 16px 25px;
+    border-radius: 14px;
     cursor: pointer;
     font-size: 1rem;
-    font-weight: bold;
+    font-weight: 700;
     width: 100%;
-    margin-top: 10px;
-    transition: background 0.2s;
+    margin-top: 15px;
+    box-shadow: 0 4px 12px rgba(118, 75, 162, 0.3);
+    transition: all 0.2s ease;
 }
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(118, 75, 162, 0.4);
+}
+.btn:active { transform: translateY(0); }
 
-.btn:hover { background: #0056b3; }
-
+/* Nút lựa chọn câu hỏi (Option) */
 .option-btn {
-    background: #f8f9fa;
-    color: #333;
-    border: 2px solid #e9ecef;
+    background: #f7fafc;
+    color: #4a5568;
+    border: 2px solid #edf2f7;
     text-align: left;
+    font-weight: 500;
+    margin-bottom: 12px;
+    box-shadow: none;
 }
-.option-btn:hover { background: #e2e6ea; border-color: #dae0e5; }
+.option-btn:hover {
+    background: #edf2f7;
+    border-color: #cbd5e0;
+    color: #2d3748;
+    transform: translateX(4px);
+}
 
+/* Thanh tiến trình bo tròn mượt */
 .progress-bar {
-    background: #e9ecef;
-    height: 8px;
-    border-radius: 4px;
-    margin-bottom: 20px;
+    background: #edf2f7;
+    height: 10px;
+    border-radius: 5px;
+    margin-bottom: 30px;
     overflow: hidden;
 }
-
 #progress {
-    background: #28a745;
+    background: linear-gradient(90deg, #48bb78 0%, #38a169 100%);
     height: 100%;
     width: 0%;
-    transition: width 0.3s;
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Vùng hiển thị ảnh kết quả chính */
+#result-img {
+    width: 100%;
+    max-width: 260px;
+    border-radius: 16px;
+    margin: 20px auto;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    display: block;
+}
+
+#result-desc {
+    color: #718096;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+/* Khung GIF Cảm ơn */
+.thank-you-container {
+    margin: 25px 0;
+    padding: 20px;
+    background: #f8fafc;
+    border-radius: 16px;
+    border: 1px dashed #cbd5e0;
+}
+.thank-you-gif {
+    width: 100%;
+    max-width: 180px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+}
+.thank-you-text {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #4a5568;
 }
