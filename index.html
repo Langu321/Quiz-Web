@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Tính Cách Bản Thân</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="quiz-container">
+        <!-- Màn hình bắt đầu -->
+        <div id="start-screen" class="screen">
+            <h1>Khám Phá Tính Cách Của Bạn</h1>
+            <p>Bài trắc nghiệm ngắn giúp bạn hiểu rõ hơn về bản thân.</p>
+            <button id="start-btn" class="btn">Bắt đầu Quiz</button>
+        </div>
+
+        <!-- Màn hình câu hỏi -->
+        <div id="quiz-screen" class="screen hide">
+            <div class="progress-bar"><div id="progress"></div></div>
+            <h2 id="question-text">Câu hỏi sẽ hiển thị ở đây</h2>
+            <div id="options-container">
+                <!-- Các lựa chọn sẽ được sinh tự động bằng JS -->
+            </div>
+        </div>
+
+        <!-- Màn hình kết quả -->
+        <div id="result-screen" class="screen hide">
+            <h2>Kết quả của bạn là:</h2>
+            <h1 id="result-type">XNDP</h1>
+            <p id="result-desc">Mô tả tính cách sẽ hiển thị ở đây.</p>
+            <button id="restart-btn" class="btn">Làm lại</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
