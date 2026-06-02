@@ -1,5 +1,26 @@
-// 1. Dữ liệu câu hỏi và trọng số
-const questions = [
+// ==========================================
+// 1. CẤU HÌNH HỆ THỐNG (SYSTEM CONFIG)
+// ==========================================
+const CONFIG = {
+    GOOGLE_SHEETS_API: "https://script.google.com/macros/s/AKfycbxhmNx1EfotUH6ilE5wu3ofBIxfPxWnb-kjzQLe6hPrdrUNf9o6dts5GtiUPe4zvncmFA/exec",
+    DEFAULT_SCORE_STATE: { E: 0, I: 0, T: 0, F: 0 }
+};
+
+// ==========================================
+// 2. THÔNG BÁO GIAO DIỆN (UI MESSAGES)
+// ==========================================
+const MESSAGES = {
+    NAME_EMPTY_ALERT: "Vui lòng nhập tên của bạn trước khi bắt đầu nhé!",
+    DATA_SEND_SUCCESS: "Dữ liệu đã được cập nhật real-time lên Google Sheets!",
+    DATA_SEND_ERROR: "Lỗi gửi dữ liệu: ",
+    UNKNOWN_RESULT_TITLE: "Chưa xác định",
+    UNKNOWN_RESULT_DESC: "Cần thêm câu hỏi để phân tích chính xác hơn."
+};
+
+// ==========================================
+// 3. DỮ LIỆU CÂU HỎI (QUIZ DATA)
+// ==========================================
+const QUIZ_QUESTIONS = [
     {
         text: "Sau một tuần làm việc mệt mỏi, bạn sẽ chọn làm gì?",
         options: [
@@ -23,127 +44,157 @@ const questions = [
     }
 ];
 
-// 2. Dữ liệu kết quả mô tả
-const resultsData = {
-    "ET": { title: "Người Điều Hành Quyết Đoán (ET)", desc: "Bạn là người năng nổ, thích hành động và luôn dựa trên lý trí để giải quyết vấn đề." },
-    "EF": { title: "Người Kết Nối Ấm Áp (EF)", desc: "Bạn tràn đầy năng lượng, thích giao lưu và luôn quan tâm đến cảm xúc của mọi người xung quanh." },
-    "IT": { title: "Nhà Phân Tích Độc Lập (IT)", desc: "Bạn thích sự yên tĩnh, có tư duy logic cao và luôn tự tìm tòi giải pháp cho mọi việc." },
-    "IF": { title: "Người Đồng Cảm Sâu Sắc (IF)", desc: "Bạn là người kín đáo, giàu tình cảm và luôn hướng tới sự hòa hợp trong các mối quan hệ." }
+// ==========================================
+// 4. DỮ LIỆU KẾT QUẢ (RESULTS MAP)
+// ==========================================
+const QUIZ_RESULTS = {
+    "ET": { 
+        title: "Người Điều Hành Quyết Đoán (ET)", 
+        desc: "Bạn là người năng nổ, thích hành động và lý trí.",
+        image: "./images/Result1.png" // Thay link ảnh thật của bạn vào đây
+    },
+    "EF": { 
+        title: "Người Kết Nối Ấm Áp (EF)", 
+        desc: "Bạn tràn đầy năng lượng và luôn quan tâm đến cảm xúc mọi người.",
+        image: "./images/Result2.png"
+    },
+    "IT": { 
+        title: "Nhà Phân Tích Độc Lập (IT)", 
+        desc: "Bạn thích sự yên tĩnh và có tư duy logic cao.",
+        image: "./images/Result3.png"
+    },
+    "IF": { 
+        title: "Người Đồng Cảm Sâu Sắc (IF)", 
+        desc: "Bạn là người kín đáo, giàu tình cảm và hòa hợp.",
+        image: "./images/Result4.png"
+    }
 };
 
-// State của ứng dụng
+// ==========================================
+// 5. BIẾN THAY ĐỔI (RUNTIME STATE)
+// ==========================================
 let currentQuestionIndex = 0;
-let userScores = { E: 0, I: 0, T: 0, F: 0 };
+let userScores = { ...CONFIG.DEFAULT_SCORE_STATE }; // Clone object tránh tham chiếu
+let userName = ""; 
 
-// DOM Elements
-const startScreen = document.getElementById('start-screen');
-const quizScreen = document.getElementById('quiz-screen');
-const resultScreen = document.getElementById('result-screen');
-const questionText = document.getElementById('question-text');
-const optionsContainer = document.getElementById('options-container');
-const progress = document.getElementById('progress');
+// ==========================================
+// 6. PHẦN TỬ GIAO DIỆN (DOM ELEMENTS)
+// ==========================================
+const DOM = {
+    startScreen: document.getElementById('start-screen'),
+    quizScreen: document.getElementById('quiz-screen'),
+    resultScreen: document.getElementById('result-screen'),
+    questionText: document.getElementById('question-text'),
+    optionsContainer: document.getElementById('options-container'),
+    progress: document.getElementById('progress'),
+    startBtn: document.getElementById('start-btn'),
+    restartBtn: document.getElementById('restart-btn'),
+    nameInput: document.getElementById('username-input'),
+    resultImg: document.getElementById('result-img'), // Thêm dòng này
+    resultType: document.getElementById('result-type'),
+    resultDesc: document.getElementById('result-desc')
+};
+
+// ==========================================
+// 7. LOGIC XỬ LÝ (APP LOGIC)
+// ==========================================
 
 // Sự kiện bắt đầu
-document.getElementById('start-btn').addEventListener('click', () => {
-    startScreen.classList.add('hide');
-    quizScreen.classList.remove('hide');
+DOM.startBtn.addEventListener('click', () => {
+    const inputName = DOM.nameInput.value.trim();
+    if (inputName === "") {
+        alert(MESSAGES.NAME_EMPTY_ALERT);
+        return;
+    }
+    userName = inputName;
+    DOM.startScreen.classList.add('hide');
+    DOM.quizScreen.classList.remove('hide');
     showQuestion();
 });
 
 // Hiển thị câu hỏi
 function showQuestion() {
-    const currentQuestion = questions[currentQuestionIndex];
-    questionText.innerText = currentQuestion.text;
-    optionsContainer.innerHTML = '';
+    const currentQuestion = QUIZ_QUESTIONS[currentQuestionIndex];
+    DOM.questionText.innerText = currentQuestion.text;
+    DOM.optionsContainer.innerHTML = '';
     
     // Cập nhật thanh tiến trình
-    progress.style.width = `${(currentQuestionIndex / questions.length) * 100}%`;
+    DOM.progress.style.width = `${(currentQuestionIndex / QUIZ_QUESTIONS.length) * 100}%`;
 
     currentQuestion.options.forEach(option => {
         const button = document.createElement('button');
         button.innerText = option.text;
         button.classList.add('btn', 'option-btn');
         button.addEventListener('click', () => handleAnswer(option.score));
-        optionsContainer.appendChild(button);
+        DOM.optionsContainer.appendChild(button);
     });
 }
 
 // Xử lý khi chọn câu trả lời
 function handleAnswer(score) {
-    // Cộng điểm
     for (let key in score) {
         userScores[key] = (userScores[key] || 0) + score[key];
     }
 
     currentQuestionIndex++;
 
-    if (currentQuestionIndex < questions.length) {
+    if (currentQuestionIndex < QUIZ_QUESTIONS.length) {
         showQuestion();
     } else {
         showResult();
     }
 }
 
-// Thêm biến global để lưu tên ở đầu file script.js
-let userName = ""; 
-
-// Sửa lại sự kiện Click nút Start
-document.getElementById('start-btn').addEventListener('click', () => {
-    const nameInput = document.getElementById('username-input').value.trim();
-    if (nameInput === "") {
-        alert("Vui lòng nhập tên của bạn trước khi bắt đầu nhé!");
-        return;
-    }
-    userName = nameInput; // Lưu tên lại
-    startScreen.classList.add('hide');
-    quizScreen.classList.remove('hide');
-    showQuestion();
-});
-
-// Sửa lại hàm showResult() cũ để gọi hàm gửi dữ liệu
+// Tính toán và hiển thị kết quả
 function showResult() {
-    quizScreen.classList.add('hide');
-    resultScreen.classList.remove('hide');
+    DOM.quizScreen.classList.add('hide');
+    DOM.resultScreen.classList.remove('hide');
 
     let type = "";
     type += (userScores.E >= userScores.I) ? "E" : "I";
     type += (userScores.T >= userScores.F) ? "T" : "F";
 
-    const finalResult = resultsData[type] || { title: "Chưa xác định", desc: "Cần thêm câu hỏi." };
+    const finalResult = QUIZ_RESULTS[type] || { 
+        title: MESSAGES.UNKNOWN_RESULT_TITLE, 
+        desc: MESSAGES.UNKNOWN_RESULT_DESC,
+        image: "https://your-link.com/images/default.png" 
+    };
 
-    document.getElementById('result-type').innerText = finalResult.title;
-    document.getElementById('result-desc').innerText = finalResult.desc;
+    // Hiển thị text
+    DOM.resultType.innerText = finalResult.title;
+    DOM.resultDesc.innerText = finalResult.desc;
 
-    // GỌI HÀM GỬI DATA SANG GOOGLE SHEETS TẠI ĐÂY
+    // HIỂN THỊ ẢNH
+    if (finalResult.image) {
+        DOM.resultImg.src = finalResult.image;
+        DOM.resultImg.style.display = "block"; // Hiện ảnh nếu có
+    } else {
+        DOM.resultImg.style.display = "none"; // Ẩn nếu không có link ảnh
+    }
+
+    // Gửi data sang Google Sheets
     sendDataToGoogle(userName, finalResult.title);
 }
 
-// Hàm gửi data bằng Fetch API
+// Hàm gửi dữ liệu bằng Fetch API
 function sendDataToGoogle(name, result) {
-    // THAY ĐƯỜNG LINK WEB APP CỦA BẠN VÀO ĐÂY
-    const googleAppScriptUrl = "https://script.google.com/macros/s/AKfycbxhmNx1EfotUH6ilE5wu3ofBIxfPxWnb-kjzQLe6hPrdrUNf9o6dts5GtiUPe4zvncmFA/exec"; 
+    const data = { name: name, result: result };
 
-    const data = {
-        name: name,
-        result: result
-    };
-
-    fetch(googleAppScriptUrl, {
+    fetch(CONFIG.GOOGLE_SHEETS_API, {
         method: "POST",
-        mode: "no-cors", // Bắt buộc phải có để tránh lỗi CORS từ Google
-        headers: {
-            "Content-Type": "application/json"
-        },
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
     })
-    .then(() => console.log("Dữ liệu đã được cập nhật real-time lên Google Sheets!"))
-    .catch(error => console.error("Lỗi gửi dữ liệu:", error));
+    .then(() => console.log(MESSAGES.DATA_SEND_SUCCESS))
+    .catch(error => console.error(MESSAGES.DATA_SEND_ERROR, error));
 }
 
 // Làm lại Quiz
-document.getElementById('restart-btn').addEventListener('click', () => {
+DOM.restartBtn.addEventListener('click', () => {
     currentQuestionIndex = 0;
-    userScores = { E: 0, I: 0, T: 0, F: 0 };
-    resultScreen.classList.add('hide');
-    startScreen.classList.remove('hide');
+    userScores = { ...CONFIG.DEFAULT_SCORE_STATE };
+    DOM.nameInput.value = ""; // Xóa text trong ô nhập tên cũ
+    DOM.resultScreen.classList.add('hide');
+    DOM.startScreen.classList.remove('hide');
 });
