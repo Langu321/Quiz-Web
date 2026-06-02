@@ -173,7 +173,7 @@ function showResult() {
     const thanksGif = document.getElementById('thanks-gif');
     if (thanksGif) {
         // Thay link GIF hoạt hình nhẹ nhàng, tươi mát và không bị lỗi load
-        thanksGif.src = "https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExYzhidm94Z3psem94ZXpueG94ZXpueG94ZXpueG94ZXpueG94ZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7abKhOpuMcmLjdcI/giphy.gif";
+        thanksGif.src = "https://jbagy.me/meme-xin-loi/?srsltid=AfmBOood8QjB0T6AvBcNiMTz7XqA9ehAwOhL4E_zlxCq4Jx57D_ys2-Q";
         thanksGif.style.display = 'inline-block'; // Ép trình duyệt render ảnh GIF ra màn hình
     }
 
