@@ -162,7 +162,7 @@ function showResult() {
     const finalResult = QUIZ_RESULTS[type] || { 
         title: MESSAGES.UNKNOWN_RESULT_TITLE, 
         desc: MESSAGES.UNKNOWN_RESULT_DESC,
-        image: "./images/default.png" 
+        image: "https://cdnv2.tgdd.vn/mwg-static/common/News/1591273/meme-meo-tang-hoa%20%288%29.jpg" 
     };
 
     DOM.resultType.innerText = finalResult.title;
@@ -172,7 +172,6 @@ function showResult() {
     // HIỂN THỊ GIF CẢM ƠN CHẮC CHẮN 100%
     const thanksGif = document.getElementById('thanks-gif');
     if (thanksGif) {
-        // Thay link GIF hoạt hình nhẹ nhàng, tươi mát và không bị lỗi load
         thanksGif.src = "https://jbagy.me/meme-xin-loi/?srsltid=AfmBOood8QjB0T6AvBcNiMTz7XqA9ehAwOhL4E_zlxCq4Jx57D_ys2-Q";
         thanksGif.style.display = 'inline-block'; // Ép trình duyệt render ảnh GIF ra màn hình
     }
