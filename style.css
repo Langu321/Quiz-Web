@@ -1,18 +1,23 @@
-/* Hệ thống màu tối giản */
+/* Hệ thống bảng màu Matcha & Milk */
 :root {
-    --primary-color: #2d3436; /* Màu xám đen sang trọng */
-    --accent-color: #0984e3;  /* Màu xanh làm điểm nhấn */
-    --bg-color: #f5f6fa;      /* Nền xám cực nhẹ */
-    --card-bg: #ffffff;
-    --text-main: #2d3436;
-    --text-sub: #636e72;
-    --border-color: #dfe6e9;
+    --matcha-primary: #78976b;   /* Màu xanh matcha chuẩn, đậm đà */
+    --matcha-light: #e8f0e6;     /* Màu bọt sữa trà xanh nhạt, mát mắt */
+    --matcha-accent: #556b2f;    /* Màu lá trà đậm làm điểm nhấn chữ */
+    --milk-white: #ffffff;       /* Trắng tinh khiết */
+    --ice-bg: #f4f7f4;           /* Màu trắng đá nền hơi ánh xanh rêu cực nhẹ */
+    --text-main: #2c3e2e;        /* Màu xám đen có chút sắc xanh */
+    --text-sub: #6b7c6e;         /* Màu xanh xám nhạt cho text phụ */
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+* { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+}
 
 body {
-    background-color: var(--bg-color);
+    background-color: var(--ice-bg);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -20,78 +25,147 @@ body {
     padding: 20px;
 }
 
+/* Card Quiz Trắng Tinh Khiết đổ bóng hiệu ứng nước mờ */
 .quiz-container {
-    background: var(--card-bg);
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); /* Đổ bóng cực nhẹ */
+    background: var(--milk-white);
+    padding: 40px 35px;
+    border-radius: 24px;
+    /* Đổ bóng mịn màu matcha nhạt, tạo cảm giác thanh khiết, bồng bềnh */
+    box-shadow: 0 15px 35px rgba(120, 151, 107, 0.12); 
     width: 100%;
-    max-width: 500px;
+    max-width: 480px;
     text-align: center;
+    border: 1px solid rgba(120, 151, 107, 0.15);
 }
 
-h1 { color: var(--text-main); font-size: 1.6rem; margin-bottom: 20px; font-weight: 700; }
-h2 { color: var(--text-sub); font-size: 1.1rem; margin-bottom: 25px; font-weight: 400; line-height: 1.5; }
+h1 { 
+    color: var(--text-main); 
+    font-size: 1.6rem; 
+    margin-bottom: 15px; 
+    font-weight: 700; 
+    letter-spacing: -0.5px;
+}
 
-/* Input tên tối giản */
+h2 { 
+    color: var(--text-sub); 
+    font-size: 1.05rem; 
+    margin-bottom: 25px; 
+    font-weight: 400; 
+    line-height: 1.6; 
+}
+
+/* Ô nhập tên tối giản viền Matcha */
 #username-input {
-    padding: 12px 15px;
+    padding: 14px 18px;
     width: 100%;
     margin-bottom: 15px;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
+    border: 1.5px solid #d1ded0;
+    background-color: #fafdfa;
+    border-radius: 12px;
     font-size: 1rem;
-    transition: all 0.3s;
+    color: var(--text-main);
+    transition: all 0.3s ease;
 }
-#username-input:focus { border-color: var(--accent-color); outline: none; }
+#username-input:focus { 
+    border-color: var(--matcha-primary); 
+    background-color: var(--milk-white);
+    box-shadow: 0 0 0 4px rgba(120, 151, 107, 0.15);
+    outline: none; 
+}
 
-/* Nút bấm phẳng (Flat Design) */
+/* Nút bấm chính - Màu Matcha Nguyên Chất */
 .btn {
-    background: var(--primary-color);
-    color: white;
+    background: var(--matcha-primary);
+    color: var(--milk-white);
     border: none;
-    padding: 14px;
-    border-radius: 8px;
+    padding: 15px;
+    border-radius: 12px;
     cursor: pointer;
     font-size: 1rem;
     font-weight: 600;
     width: 100%;
-    transition: background 0.2s;
+    box-shadow: 0 4px 12px rgba(120, 151, 107, 0.2);
+    transition: all 0.2s ease;
 }
-.btn:hover { background: #000000; }
+.btn:hover { 
+    background: var(--matcha-accent); 
+    transform: translateY(-1px);
+    box-shadow: 0 6px 15px rgba(120, 151, 107, 0.3);
+}
+.btn:active { transform: translateY(0); }
 
-/* Nút chọn câu hỏi */
+/* Nút chọn câu hỏi - Nền trắng sữa viền nhạt nhấp nháy matcha */
 .option-btn {
-    background: white;
+    background: var(--milk-white);
     color: var(--text-main);
-    border: 1px solid var(--border-color);
+    border: 1.5px solid #e1ebe0;
     text-align: left;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    font-weight: 500;
+    box-shadow: none;
+    transition: all 0.25s ease;
 }
 .option-btn:hover {
-    background: var(--bg-color);
-    border-color: var(--text-sub);
+    background: var(--matcha-light);
+    border-color: var(--matcha-primary);
+    color: var(--matcha-accent);
+    transform: translateX(4px);
 }
 
-/* Thanh tiến trình */
-.progress-bar { background: var(--bg-color); height: 6px; border-radius: 3px; margin-bottom: 25px; }
-#progress { background: var(--accent-color); height: 100%; width: 0%; transition: width 0.3s; }
+/* Thanh tiến trình mềm mại như dòng nước */
+.progress-bar { 
+    background: #edf2ed; 
+    height: 8px; 
+    border-radius: 4px; 
+    margin-bottom: 30px; 
+    overflow: hidden;
+}
+#progress { 
+    background: var(--matcha-primary); 
+    height: 100%; 
+    width: 0%; 
+    border-radius: 4px;
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+}
 
-/* Vùng Kết quả & GIF */
-#result-img { width: 100%; max-width: 220px; border-radius: 12px; margin: 20px auto; }
+/* Vùng hiển thị ảnh kết quả */
+#result-img { 
+    width: 100%; 
+    max-width: 240px; 
+    border-radius: 16px; 
+    margin: 20px auto; 
+    box-shadow: 0 8px 20px rgba(120, 151, 107, 0.15);
+}
 
+#result-desc {
+    color: var(--text-sub);
+    font-size: 0.98rem;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+/* Khung hiển thị GIF Cảm ơn tinh tế */
 .thank-you-container {
     margin-top: 30px;
     padding-top: 20px;
-    border-top: 1px solid var(--border-color);
+    border-top: 1px dashed #d1ded0;
 }
 
 .thank-you-gif {
-    width: 150px; /* Chỉnh lại kích thước GIF vừa phải */
+    width: 140px;
     height: auto;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    display: none; /* Sẽ hiện lên bằng JS khi có kết quả */
+    border-radius: 12px;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    display: none; /* Kích hoạt block bằng JS */
 }
 
-.hide { display: none; }
+.thank-you-text {
+    color: var(--text-sub);
+    font-size: 0.88rem;
+    font-weight: 500;
+}
+
+.hide { display: none !important; }
