@@ -88,12 +88,14 @@ const DOM = {
     questionText: document.getElementById('question-text'),
     optionsContainer: document.getElementById('options-container'),
     progress: document.getElementById('progress'),
+    progressInfo: document.getElementById('progress-info'),
     startBtn: document.getElementById('start-btn'),
     restartBtn: document.getElementById('restart-btn'),
     nameInput: document.getElementById('username-input'),
-    resultImg: document.getElementById('result-img'), 
+    resultImg: document.getElementById('result-img'),
     resultType: document.getElementById('result-type'),
-    resultDesc: document.getElementById('result-desc')
+    resultDesc: document.getElementById('result-desc'),
+    resultGreeting: document.getElementById('result-greeting')
 };
 
 // ==========================================
@@ -119,7 +121,9 @@ function showQuestion() {
     DOM.questionText.innerText = currentQuestion.text;
     DOM.optionsContainer.innerHTML = '';
     
-    DOM.progress.style.width = `${(currentQuestionIndex / QUIZ_QUESTIONS.length) * 100}%`;
+    const progressPercent = Math.round((currentQuestionIndex / QUIZ_QUESTIONS.length) * 100);
+    DOM.progress.style.width = `${progressPercent}%`;
+    DOM.progressInfo.innerText = `Câu ${currentQuestionIndex + 1} / ${QUIZ_QUESTIONS.length}`;
 
     currentQuestion.options.forEach(option => {
         const button = document.createElement('button');
@@ -154,6 +158,8 @@ function handleAnswer(optionId, score) {
 function showResult() {
     DOM.quizScreen.classList.add('hide');
     DOM.resultScreen.classList.remove('hide');
+
+    DOM.resultGreeting.innerText = `Cảm ơn ${userName}, đây là kết quả của bạn:`;
 
     let type = "";
     type += (userScores.E >= userScores.I) ? "E" : "I";

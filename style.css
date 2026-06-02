@@ -4,73 +4,103 @@
     --matcha-light: #e8f0e6;     /* Màu bọt sữa trà xanh nhạt, mát mắt */
     --matcha-accent: #556b2f;    /* Màu lá trà đậm làm điểm nhấn chữ */
     --milk-white: #ffffff;       /* Trắng tinh khiết */
-    --ice-bg: #f4f7f4;           /* Màu trắng đá nền hơi ánh xanh rêu cực nhẹ */
+    --ice-bg: #edf4ef;           /* Nền hơi xanh nhạt */
+    --bg-top: #f6fbf7;
+    --bg-bottom: #e6f0e6;
     --text-main: #2c3e2e;        /* Màu xám đen có chút sắc xanh */
-    --text-sub: #6b7c6e;         /* Màu xanh xám nhạt cho text phụ */
+    --text-sub: #607061;         /* Màu xanh xám nhạt cho text phụ */
 }
 
-* { 
-    box-sizing: border-box; 
-    margin: 0; 
-    padding: 0; 
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
-    background-color: var(--ice-bg);
+    background: radial-gradient(circle at top left, rgba(120, 151, 107, 0.14), transparent 30%),
+                radial-gradient(circle at bottom right, rgba(87, 127, 92, 0.12), transparent 28%),
+                linear-gradient(180deg, var(--bg-top), var(--bg-bottom));
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    padding: 20px;
+    padding: 24px;
+    color: var(--text-main);
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.7) 0%, transparent 25%),
+                      radial-gradient(circle at 80% 80%, rgba(255,255,255,0.5) 0%, transparent 22%);
+    pointer-events: none;
 }
 
 /* Card Quiz Trắng Tinh Khiết đổ bóng hiệu ứng nước mờ */
 .quiz-container {
-    background: var(--milk-white);
-    padding: 40px 35px;
-    border-radius: 24px;
-    /* Đổ bóng mịn màu matcha nhạt, tạo cảm giác thanh khiết, bồng bềnh */
-    box-shadow: 0 15px 35px rgba(120, 151, 107, 0.12); 
+    background: rgba(255, 255, 255, 0.98);
+    padding: 44px 38px;
+    border-radius: 30px;
+    box-shadow: 0 28px 70px rgba(73, 95, 68, 0.12);
     width: 100%;
-    max-width: 480px;
+    max-width: 520px;
     text-align: center;
-    border: 1px solid rgba(120, 151, 107, 0.15);
+    border: 1px solid rgba(120, 151, 107, 0.14);
+    position: relative;
+    overflow: hidden;
 }
 
-h1 { 
-    color: var(--text-main); 
-    font-size: 1.6rem; 
-    margin-bottom: 15px; 
-    font-weight: 700; 
-    letter-spacing: -0.5px;
+.quiz-container::after {
+    content: '';
+    position: absolute;
+    bottom: -40px;
+    right: -60px;
+    width: 210px;
+    height: 210px;
+    background: radial-gradient(circle, rgba(120,151,107,0.12), transparent 60%);
+    pointer-events: none;
 }
 
-h2 { 
-    color: var(--text-sub); 
-    font-size: 1.05rem; 
-    margin-bottom: 25px; 
-    font-weight: 400; 
-    line-height: 1.6; 
+h1 {
+    color: var(--text-main);
+    font-size: clamp(1.7rem, 2.3vw, 2.2rem);
+    margin-bottom: 14px;
+    font-weight: 800;
+    letter-spacing: -0.8px;
+}
+
+h2 {
+    color: var(--text-sub);
+    font-size: 1.03rem;
+    margin-bottom: 22px;
+    font-weight: 500;
+    line-height: 1.65;
 }
 
 /* Ô nhập tên tối giản viền Matcha */
 #username-input {
-    padding: 14px 18px;
+    padding: 16px 20px;
     width: 100%;
-    margin-bottom: 15px;
-    border: 1.5px solid #d1ded0;
-    background-color: #fafdfa;
-    border-radius: 12px;
+    margin-bottom: 20px;
+    border: 1.5px solid #d9e5d5;
+    background-color: #fbfdf9;
+    border-radius: 16px;
     font-size: 1rem;
     color: var(--text-main);
     transition: all 0.3s ease;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.04);
 }
-#username-input:focus { 
-    border-color: var(--matcha-primary); 
+#username-input::placeholder {
+    color: #8c9c87;
+}
+#username-input:focus {
+    border-color: var(--matcha-primary);
     background-color: var(--milk-white);
-    box-shadow: 0 0 0 4px rgba(120, 151, 107, 0.15);
-    outline: none; 
+    box-shadow: 0 0 0 5px rgba(120, 151, 107, 0.12);
+    outline: none;
 }
 
 /* Nút bấm chính - Màu Matcha Nguyên Chất */
@@ -78,72 +108,110 @@ h2 {
     background: var(--matcha-primary);
     color: var(--milk-white);
     border: none;
-    padding: 15px;
-    border-radius: 12px;
+    padding: 16px 20px;
+    border-radius: 16px;
     cursor: pointer;
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: 700;
     width: 100%;
-    box-shadow: 0 4px 12px rgba(120, 151, 107, 0.2);
-    transition: all 0.2s ease;
+    box-shadow: 0 10px 25px rgba(120, 151, 107, 0.18);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
-.btn:hover { 
-    background: var(--matcha-accent); 
-    transform: translateY(-1px);
-    box-shadow: 0 6px 15px rgba(120, 151, 107, 0.3);
+.btn:hover {
+    background: var(--matcha-accent);
+    transform: translateY(-2px);
+    box-shadow: 0 14px 30px rgba(120, 151, 107, 0.24);
 }
-.btn:active { transform: translateY(0); }
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn.secondary {
+    background: transparent;
+    color: var(--matcha-accent);
+    border: 1.5px solid rgba(85, 107, 47, 0.25);
+    box-shadow: none;
+}
+.btn.secondary:hover {
+    background: rgba(120, 151, 107, 0.08);
+}
 
 /* Nút chọn câu hỏi - Nền trắng sữa viền nhạt nhấp nháy matcha */
 .option-btn {
+    display: block;
+    width: 100%;
     background: var(--milk-white);
     color: var(--text-main);
-    border: 1.5px solid #e1ebe0;
+    border: 1.5px solid #e2ece0;
     text-align: left;
-    margin-bottom: 12px;
-    padding: 14px 18px;
-    border-radius: 12px;
-    font-weight: 500;
-    box-shadow: none;
-    transition: all 0.25s ease;
+    margin-bottom: 14px;
+    padding: 18px 20px;
+    border-radius: 18px;
+    font-weight: 600;
+    box-shadow: 0 8px 20px rgba(39, 59, 43, 0.05);
+    transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease;
 }
 .option-btn:hover {
-    background: var(--matcha-light);
+    background: rgba(120, 151, 107, 0.09);
     border-color: var(--matcha-primary);
     color: var(--matcha-accent);
-    transform: translateX(4px);
+    transform: translateY(-2px);
 }
 
 /* Thanh tiến trình mềm mại như dòng nước */
-.progress-bar { 
-    background: #edf2ed; 
-    height: 8px; 
-    border-radius: 4px; 
-    margin-bottom: 30px; 
+.quiz-header {
+    display: grid;
+    gap: 14px;
+    margin-bottom: 10px;
+}
+.progress-info {
+    color: var(--matcha-accent);
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-align: left;
+}
+.progress-bar {
+    background: #edf2ed;
+    height: 10px;
+    border-radius: 999px;
     overflow: hidden;
 }
-#progress { 
-    background: var(--matcha-primary); 
-    height: 100%; 
-    width: 0%; 
-    border-radius: 4px;
-    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+#progress {
+    background: var(--matcha-primary);
+    height: 100%;
+    width: 0%;
+    border-radius: 999px;
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Vùng hiển thị ảnh kết quả */
-#result-img { 
-    width: 100%; 
-    max-width: 240px; 
-    border-radius: 16px; 
-    margin: 20px auto; 
-    box-shadow: 0 8px 20px rgba(120, 151, 107, 0.15);
+#result-img {
+    width: 100%;
+    max-width: 280px;
+    border-radius: 22px;
+    margin: 16px auto;
+    box-shadow: 0 18px 40px rgba(85, 107, 47, 0.12);
+}
+
+.result-hero {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+#result-greeting {
+    color: var(--matcha-accent);
+    font-size: 0.95rem;
+    font-weight: 700;
 }
 
 #result-desc {
     color: var(--text-sub);
-    font-size: 0.98rem;
-    line-height: 1.6;
-    margin-bottom: 25px;
+    font-size: 1rem;
+    line-height: 1.7;
+    margin-bottom: 24px;
 }
 
 /* Khung hiển thị GIF Cảm ơn tinh tế */
@@ -156,16 +224,45 @@ h2 {
 .thank-you-gif {
     width: 140px;
     height: auto;
-    border-radius: 12px;
+    border-radius: 18px;
     margin-bottom: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    display: none; /* Kích hoạt block bằng JS */
+    box-shadow: 0 14px 32px rgba(49, 68, 42, 0.12);
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.thank-you-gif.visible {
+    opacity: 1;
+    transform: translateY(0);
+    display: inline-block;
 }
 
 .thank-you-text {
     color: var(--text-sub);
-    font-size: 0.88rem;
+    font-size: 0.92rem;
     font-weight: 500;
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: rgba(120, 151, 107, 0.12);
+    color: var(--matcha-accent);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 18px;
+}
+
+.subtitle {
+    color: var(--text-sub);
+    font-size: 0.98rem;
+    margin-bottom: 28px;
+    line-height: 1.7;
 }
 
 .hide { display: none !important; }
