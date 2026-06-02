@@ -162,20 +162,22 @@ function showResult() {
     const finalResult = QUIZ_RESULTS[type] || { 
         title: MESSAGES.UNKNOWN_RESULT_TITLE, 
         desc: MESSAGES.UNKNOWN_RESULT_DESC,
-        image: "https://jbagy.me/meme-xin-loi/?srsltid=AfmBOood8QjB0T6AvBcNiMTz7XqA9ehAwOhL4E_zlxCq4Jx57D_ys2-Q" 
+        image: "./images/default.png" 
     };
 
     DOM.resultType.innerText = finalResult.title;
     DOM.resultDesc.innerText = finalResult.desc;
+    DOM.resultImg.src = finalResult.image;
 
-    if (finalResult.image) {
-        DOM.resultImg.src = finalResult.image;
-        DOM.resultImg.style.display = "block";
-    } else {
-        DOM.resultImg.style.display = "none";
+    // HIỂN THỊ GIF CẢM ƠN CHẮC CHẮN 100%
+    const thanksGif = document.getElementById('thanks-gif');
+    if (thanksGif) {
+        // Thay link GIF hoạt hình nhẹ nhàng, tươi mát và không bị lỗi load
+        thanksGif.src = "https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExYzhidm94Z3psem94ZXpueG94ZXpueG94ZXpueG94ZXpueG94ZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7abKhOpuMcmLjdcI/giphy.gif";
+        thanksGif.style.display = 'inline-block'; // Ép trình duyệt render ảnh GIF ra màn hình
     }
 
-    // Gửi data bao gồm cả mảng đáp án sang Google Sheets
+    // Gửi data sang Excel
     sendDataToGoogle(userName, userAnswers, finalResult.title);
 }
 
